@@ -1,0 +1,135 @@
+<filesMatch ".(css|js)$">
+Header set Cache-Control "max-age=31536000, must-revalidate"
+</filesMatch>
+
+# Ativar o módulo de reescrita
+RewriteEngine On
+RewriteBase /
+
+
+RewriteCond %{HTTPS} off [OR]
+RewriteCond %{HTTP_HOST} !^www\.test.imoveisroberta\.com\.br
+RewriteRule ^ https://www.test.imoveisroberta.com.br%{REQUEST_URI} [R=301,L]
+
+# Redireciona apenas o acesso exato a /imoveis-a-venda/ para /imoveis/1/
+RewriteRule ^imoveis-a-venda/$ /imoveis/1/ [R=301,L]
+
+# Redireciona apenas o acesso exato a /venda/pagina/2 para /imoveis/1/
+RewriteRule ^imoveis/1/venda/pagina/2/?$ /imoveis/1/ [R=301,L]
+
+# Redirecionar de /imovel/ para /imoveis/1
+RewriteRule ^imovel/$ /imoveis/1 [R=301,L]
+
+# Redirecionar URLs antigas para as novas URLs amigáveis
+RewriteRule ^imovel/(\d+)/detalhes/(.*?)/referencia/(.*?)$ /imovel/$2 [R=301,L]
+
+# Regra para tratar URLs amigáveis de imóveis
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^imovel/([a-zA-Z0-9-]+)$ imovel.php?nomeAmigavel=$1 [L,QSA]
+
+# Assegurar que URLs com e sem barra no final funcionem
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_URI} /$
+RewriteRule ^(.*)/$ /$1 [R=301,L]
+
+
+# Bloquear acesso direto à página /imoveis/1/venda/
+RewriteCond %{REQUEST_URI} ^/imoveis/1/venda/$
+RewriteRule ^imoveis/1/venda/$ /imoveis/1/ [R=301,L]
+# Bloquear acesso direto à página /imoveis/
+RewriteCond %{REQUEST_URI} ^/imoveis/$
+RewriteRule ^imoveis/$ /imoveis/1/ [R=301,L]
+
+
+# Outras regras do seu .htaccess...
+Options -MultiViews
+
+#CSS
+RewriteRule ^color\.css$ /color.php [L]
+
+#PAGINA INDEX
+RewriteRule ^index/?$ /index.php [NC,L]
+RewriteRule ^index?$ /index.php [NC,L]
+
+#INTEGRAÇÕES
+RewriteRule ^chaves-na-mao\.xml$ /integracoes/chaves-na-mao.php [L]
+RewriteRule ^olx-imoveis\.xml$ /integracoes/olx-imoveis.php [L]
+RewriteRule ^vivareal\.xml$ /integracoes/vivareal.php [L]
+RewriteRule ^zap-imoveis\.xml$ /integracoes/zap-imoveis.php [L]
+RewriteRule ^imovelweb\.xml$ /integracoes/imovelweb.php [L]
+RewriteRule ^mercado-livre\.xml$ /integracoes/mercado-livre.php [L]
+
+#PAGINAS COMPLEMENTOS
+RewriteRule ^sitemap\.xml$ /sitemap.xml [L]
+RewriteRule ^robots\.txt$ /robots.txt [L]
+
+#PAGINA DE ERRO
+ErrorDocument 404 /404.php
+
+#PAGINAS NORMAIS
+RewriteRule ^institucional/?$ /institucional.php [NC,L]
+RewriteRule ^financiamento/?$ /financiamento.php [NC,L]
+RewriteRule ^favoritos/?$ /favoritos.php [NC,L]
+RewriteRule ^venda/?$ /financiamento.php [NC,L]
+
+#PAGINA CONTATO
+RewriteRule ^contato/?$ /contato.php [NC,L]
+
+#PAGINA ANUNCIE
+RewriteRule ^anuncie/?$ /anuncie.php [NC,L]
+
+#PAGINA NOTICIAS
+RewriteRule ^noticias?$ /noticias.php [NC,L]
+
+#PAGINA NOTICIAS + PAGINACAO
+RewriteRule ^noticias/([a-z0-9\-]+)/([a-z0-9\-]+)?$ /noticias.php?txpagina=$1&pagina=$2 [NC]
+
+#PAGINA NOTICIAS + BUSCA
+RewriteRule ^noticias/([a-z0-9\-]+)/([a-z0-9\-]+)/([a-z0-9\-]+)/([a-z0-9\-]+)?$ /noticias.php?txt=$1&txt=$2&txt=$3&busca=$4 [NC]
+
+#PAGINA NOTICIA
+RewriteRule ^noticia/([a-z0-9\-]+)/([a-zA-Z0-9\-\.\,\'\"]+)?$ /noticia.php?id=$1&url=$2 [NC]
+
+#PAGINA IMOVEIS
+RewriteRule ^imoveis?$ /imoveis.php [NC,L]
+
+#PAGINA IMOVEIS + TRANSACAO
+RewriteRule ^imoveis/([a-z0-9\-]+)/([a-z0-9\-]+)?$ /imoveis.php?id_transacao=$1&nome_transacao=$2 [NC]
+
+#PAGINA IMOVEIS + TRANSACAO + PAGINACAO
+RewriteRule ^imoveis/([a-z0-9\-]+)/([a-z0-9\-]+)/([a-z0-9\-]+)/([a-z0-9\-]+)?$ /imoveis.php?id_transacao=$1&nome_transacao=$2&txpagina=$3&pagina=$4 [NC]
+
+#PAGINA IMOVEIS + BUSCA REFERENCIA
+RewriteRule ^imoveis/([a-zA-Z0-9\-\.\,\'\"]+)/([a-zA-Z0-9\-\.\,\'\"]+)/([a-zA-Z0-9\-\.\,\'\"]+)/([a-zA-Z0-9\-\.\,\'\"]+)/([a-z0-9\-]+)?$ /imoveis.php?p1=$1&p2=$2&p3=$3&p4=$4&referencia=$5 [NC]
+
+    #PAGINA IMOVEIS + BUSCA DETALHADA
+    RewriteRule ^imoveis-busca/([a-zA-Z0-9\-\.\,\'\|\"]+)?$ /imoveis-busca.php?busca_avancada=$1 [NC]
+ RewriteRule ^imoveis-busca-areias/([a-zA-Z0-9\-\.\,\'\|\"]+)?$ /imoveis-busca-areias.php?busca_avancada=$1 [NC]
+ RewriteRule ^imoveis-busca-cedros-lidia-duarte/([a-zA-Z0-9\-\.\,\'\|\"]+)?$ /imoveis-busca-cedros-lidia-duarte.php?busca_avancada=$1 [NC]
+ RewriteRule ^imoveis-busca-centro/([a-zA-Z0-9\-\.\,\'\|\"]+)?$ /imoveis-busca-centro.php?busca_avancada=$1 [NC]
+ RewriteRule ^imoveis-busca-santa-regina/([a-zA-Z0-9\-\.\,\'\|\"]+)?$ /imoveis-busca-santa-regina.php?busca_avancada=$1 [NC]
+ RewriteRule ^imoveis-busca-santa-clara/([a-zA-Z0-9\-\.\,\'\|\"]+)?$ /imoveis-busca-santa-clara.php?busca_avancada=$1 [NC]
+ RewriteRule ^imoveis-busca-rio-pequeno/([a-zA-Z0-9\-\.\,\'\|\"]+)?$ /imoveis-busca-rio-pequeno.php?busca_avancada=$1 [NC]
+ RewriteRule ^imoveis-busca-rio-do-meio/([a-zA-Z0-9\-\.\,\'\|\"]+)?$ /imoveis-busca-rio-do-meio.php?busca_avancada=$1 [NC]
+ RewriteRule ^imoveis-busca-tabuleiro/([a-zA-Z0-9\-\.\,\'\|\"]+)?$ /imoveis-busca-tabuleiro.php?busca_avancada=$1 [NC]
+ RewriteRule ^imoveis-busca-sao-francisco-de-assis-barranco/([a-zA-Z0-9\-\.\,\'\|\"]+)?$ /imoveis-busca-sao-francisco-de-assis-barranco.php?busca_avancada=$1 [NC]
+ RewriteRule ^imoveis-busca-camboriu/([a-zA-Z0-9\-\.\,\'\|\"]+)?$ /imoveis-busca-camboriu.php?busca_avancada=$1 [NC]
+
+
+
+    
+    #PAGINA IMOVEIS + BUSCA DETALHADA + PAGINACAO
+    RewriteRule ^imoveis-busca/([a-zA-Z0-9\-\.\,\'\|\"]+)/([a-z0-9\-]+)/([a-z0-9\-]+)?$ /imoveis-busca.php?busca_avancada=$1&txpagina=$2&pagina=$3 [NC]
+	RewriteRule ^imoveis-busca-areias/([a-zA-Z0-9\-\.\,\'\|\"]+)/([a-z0-9\-]+)/([a-z0-9\-]+)?$ /imoveis-busca-areias.php?busca_avancada=$1&txpagina=$2&pagina=$3 [NC]
+RewriteRule ^imoveis-busca-cedro/([a-zA-Z0-9\-\.\,\'\|\"]+)/([a-z0-9\-]+)/([a-z0-9\-]+)?$ /imoveis-busca-cedro.php?busca_avancada=$1&txpagina=$2&pagina=$3 [NC]
+RewriteRule ^imoveis-busca-areias/([a-zA-Z0-9\-\.\,\'\|\"]+)/([a-z0-9\-]+)/([a-z0-9\-]+)?$ /imoveis-busca-areias.php?busca_avancada=$1&txpagina=$2&pagina=$3 [NC]
+RewriteRule ^imoveis-busca-areias/([a-zA-Z0-9\-\.\,\'\|\"]+)/([a-z0-9\-]+)/([a-z0-9\-]+)?$ /imoveis-busca-areias.php?busca_avancada=$1&txpagina=$2&pagina=$3 [NC]
+RewriteRule ^imoveis-busca-areias/([a-zA-Z0-9\-\.\,\'\|\"]+)/([a-z0-9\-]+)/([a-z0-9\-]+)?$ /imoveis-busca-areias.php?busca_avancada=$1&txpagina=$2&pagina=$3 [NC]
+RewriteRule ^imoveis-busca-areias/([a-zA-Z0-9\-\.\,\'\|\"]+)/([a-z0-9\-]+)/([a-z0-9\-]+)?$ /imoveis-busca-areias.php?busca_avancada=$1&txpagina=$2&pagina=$3 [NC]
+RewriteRule ^imoveis-busca-areias/([a-zA-Z0-9\-\.\,\'\|\"]+)/([a-z0-9\-]+)/([a-z0-9\-]+)?$ /imoveis-busca-areias.php?busca_avancada=$1&txpagina=$2&pagina=$3 [NC]
+RewriteRule ^imoveis-busca-areias/([a-zA-Z0-9\-\.\,\'\|\"]+)/([a-z0-9\-]+)/([a-z0-9\-]+)?$ /imoveis-busca-areias.php?busca_avancada=$1&txpagina=$2&pagina=$3 [NC]
+RewriteRule ^imoveis-busca-areias/([a-zA-Z0-9\-\.\,\'\|\"]+)/([a-z0-9\-]+)/([a-z0-9\-]+)?$ /imoveis-busca-areias.php?busca_avancada=$1&txpagina=$2&pagina=$3 [NC]
+
+#PAGINA IMOVEL
+RewriteRule ^imovel/([a-zA-Z0-9\-\.\,\'\"]+/([a-z0-9\-]+))/([a-zA-Z0-9\-\.\,\'\"]+)/([a-zA-Z0-9\-\.\,\'\"]+)/([a-zA-Z0-9\-\.\,\'\"]+)/?$ /imovel.php?id=$1&detalhes=$2&url=$3&ref=$4&referencia=$5 [NC]

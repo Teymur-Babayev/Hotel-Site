@@ -1,0 +1,30 @@
+#google_translate_element, 
+.goog-te-banner-frame, 
+.goog-te-balloon-frame, 
+#goog-gt-tt, 
+.goog-te-balloon-frame, 
+.goog-tooltip, 
+.goog-tooltip:hover{ 
+	display:none !important; 
+}
+html, body { 
+	top: 0 !important; 
+}
+font { 
+	background: transparent !important; 
+	color: inherit !important; 
+	font: inherit !important; 
+}
+font:hover, 
+.goog-text-highlight:hover, 
+.goog-text-highlight { 
+	-webkit-box-shadow: inherit !important; 
+	-moz-box-shadow: inherit !important; 
+	box-shadow: inherit !important; 
+	box-sizing: inherit !important; 
+	-webkit-box-sizing: inherit !important; 
+	-moz-box-sizing: inherit !important;
+}
+.topo-box-bandeira{
+	display:inline !important
+}

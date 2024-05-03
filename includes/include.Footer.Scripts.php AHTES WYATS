@@ -1,0 +1,132 @@
+<?php include "includes/include.Termo.Cookies.php";?>
+<script>
+function sendWhatsAppMessage() {
+    var pageTitle = document.title; // Captura o título da página
+    var pageUrl = window.location.href; // Captura o URL da página
+    var message = "Olá! vim do site e gostaria de mais informações " + pageUrl;
+    var phoneNumber = '5547992463978'; // Substitua SEUNUMERO pelo seu número de WhatsApp, incluindo o código do país
+
+    var whatsappUrl = "https://wa.me/" + phoneNumber + "?text=" + encodeURIComponent(message);
+    window.open(whatsappUrl, '_blank'); // Abre o link do WhatsApp em uma nova aba
+}
+</script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    var campos = document.querySelectorAll('#id_tipo, #id_cidade, #id_bairro');
+    campos.forEach(function(campo) {
+        campo.addEventListener('change', function() {
+            document.getElementById('btnBuscar').innerHTML = '<i class="fa fa-search"></i> BUSCAR';
+        });
+    });
+});
+</script>
+<script src="<?php echo $_linkCompleto;?>/assets/template/lib/jquery/jquery-3.3.1.min.js"></script>
+<script src="<?php echo $_linkCompleto;?>/assets/template/lib/contrast/contrast.js"></script> 
+<script src="<?php echo $_linkCompleto;?>/assets/template/lib/form-validator-send/form-validator.min.js"></script>
+<script src="<?php echo $_linkCompleto;?>/assets/template/lib/form-validator-send/jquery.validate.min.js"></script>	
+<script src="<?php echo $_linkCompleto;?>/assets/template/lib/form-validator-send/jquery.maskedinput.js"></script>
+<script src="<?php echo $_linkCompleto;?>/assets/template/lib/form-validator-send/actions-form.js"></script>
+<script src="<?php echo $_linkCompleto;?>/assets/template/lib/owl-carousel/owl.carousel.js"></script>
+<script src="<?php echo $_linkCompleto;?>/assets/template/lib/ekko-lightbox/ekko-lightbox.js"></script>
+<script src="<?php echo $_linkCompleto;?>/assets/template/lib/bootstrap/bootstrap.min.js"></script>
+<script src="<?php echo $_linkCompleto;?>/assets/template/js/custom.js"></script>
+<script src="<?php echo $_linkCompleto;?>/assets/template/lib/form-validator-send/cotacao-form.js"></script>
+<script src="<?php echo $_linkCompleto;?>/assets/template/lib/form-validator-send/contact-page-form.js"></script>
+<script src="<?php echo $_linkCompleto;?>/assets/template/lib/form-validator-send/newsletter-form.js"></script>
+
+<!-- BUSCADOR !-->
+<script src="<?php echo $_linkCompleto;?>/assets/template/lib/mask-input/jquery.maskedinput.js"></script>
+<script src="<?php echo $_linkCompleto;?>/assets/template/lib/mask-input/jquery.maskMoney.min.js"></script>
+<script src="<?php echo $_linkCompleto;?>/assets/template/lib/mask-input/mask.actions.js"></script>
+<script>
+	function buscarReferencia(){
+		if ($("#referencia").val()==""){
+			alert("Por favor, insira a referência do imóvel!");
+			$("#referencia").focus();
+		}else{
+			window.location.href = "<?php echo $_linkCompleto;?>" +"/imoveis/resultado/da/busca/referencia/"+$("#referencia").val();
+		}	
+	}
+</script>
+<script>
+	function buscarImovelDetalhado(){
+		window.location.href="<?php echo $_linkCompleto;?>"+"/imoveis-busca/"
+		+"transacao"
+		+"-"
+		+$("#id_transacao").val()
+		+"-"
+		+"finalidade"
+		+"-"
+		+$("#id_finalidade").val()
+		+"-"
+		+"tipo"
+		+"-"
+		+$("#id_tipo").val()
+		+"-"
+		+"cidade"
+		+"-"
+		+$("#id_cidade").val()
+		+"-"
+		+"bairro"
+		+"-"
+		+($("#id_bairro").val() == null ? 0 : $("#id_bairro").val())
+		+"-"
+		+"dormitorios"
+		+"-"
+		+$("#dependencias_quartos").val()
+		+"-"
+		+"suites"
+		+"-"
+		+$("#dependencias_suites").val()
+		+"-"
+		+"banheiros"
+		+"-"
+		+$("#dependencias_banheiro").val()
+		+"-"
+		+"garagens"
+		+"-"
+		+$("#dependencias_garagem").val()
+		+"-"
+		+"minimo"
+		+"-"
+		+moneyToDecimal($("#valor_minimo").val())
+		+"-"
+		+"maximo"
+		+"-"
+		+moneyToDecimal($("#valor_maximo").val());
+	}
+</script>
+<script>
+	$("#id_cidade").change(function(){
+		$("#id_bairro").empty();
+		$.ajax({
+			url: "<?php echo $_linkCompleto;?>/adm_gerencia/estrutura/imoveis/ajaxBairros.php",
+			data: {'id':$("#id_cidade").val()},
+			contentType: "application/json; charset=utf-8",
+			dataType: "json",
+			success: function(data){
+				if (data.subs.length>0){
+					$("#id_bairro").append('<option selected="selected" value="0">Selecione...</option>');
+					for (i=0; i<data.subs.length; i++){
+						if (data.subs[i].id=="<?php echo $_idBairro;?>"){
+							$("#id_bairro").append('<option selected="selected" value="' + data.subs[i].id + '">' + data.subs[i].nome + '</option>')
+						}else{
+							$("#id_bairro").append('<option value="' + data.subs[i].id + '">' + data.subs[i].nome + '</option>')
+						}
+					}
+				}
+			}
+	
+		 });
+	});
+</script>
+
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=AW-16524881369"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'AW-16524881369');
+</script>
